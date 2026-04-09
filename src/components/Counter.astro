@@ -1,23 +1,16 @@
 ---
 // Counter.astro
-// Calcula los días desde la última cerveza y anima el número al cargar
-
-const START_DATE = new Date('2026-01-13T00:00:00');
-const today = new Date();
-today.setHours(0, 0, 0, 0);
-const diffMs = today.getTime() - START_DATE.getTime();
-const totalDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
-const weeks = Math.floor(totalDays / 7);
-const months = (totalDays / 30.44).toFixed(1);
+// Calcula los días desde la última cerveza — lee fecha de localStorage (client-side)
 ---
 
 <div class="text-center">
   <!-- Etiqueta superior estilo vintage -->
   <p
+    id="counter-date-label"
     class="animate-fade delay-100 font-display uppercase tracking-[0.35em] mb-6"
     style="font-size: 0.9rem; color: var(--color-amber); opacity: 0;"
   >
-    Última chela &mdash; 13 enero 2026
+    &nbsp;
   </p>
 
   <!-- Número principal animado -->
@@ -25,7 +18,6 @@ const months = (totalDays / 30.44).toFixed(1);
     <span
       id="days-counter"
       class="font-display font-black leading-none select-none"
-      data-target={totalDays}
       style="
         font-size: clamp(9rem, 28vw, 22rem);
         color: var(--color-amber);
@@ -56,59 +48,86 @@ const months = (totalDays / 30.44).toFixed(1);
   <div class="flex justify-center gap-12 animate-fade-up delay-600" style="opacity: 0;">
     <div class="text-center">
       <div
+        id="counter-weeks"
         class="font-display font-bold"
         style="font-size: clamp(2rem, 6vw, 3.5rem); color: var(--color-gold); line-height: 1;"
-      >
-        {weeks}
-      </div>
+      >0</div>
       <div
+        id="counter-weeks-label"
         class="font-display uppercase tracking-widest mt-1"
         style="font-size: 0.8rem; color: var(--color-cream-dim); letter-spacing: 0.12em;"
-      >
-        {weeks === 1 ? 'semana' : 'semanas'}
-      </div>
+      >semanas</div>
     </div>
 
     <div style="width: 1px; background: oklch(72% 0.18 72 / 0.25);"></div>
 
     <div class="text-center">
       <div
+        id="counter-months"
         class="font-display font-bold"
         style="font-size: clamp(2rem, 6vw, 3.5rem); color: var(--color-gold); line-height: 1;"
-      >
-        {months}
-      </div>
+      >0</div>
       <div
+        id="counter-months-label"
         class="font-display uppercase tracking-widest mt-1"
         style="font-size: 0.8rem; color: var(--color-cream-dim); letter-spacing: 0.12em;"
-      >
-        {parseFloat(months) === 1 ? 'mes' : 'meses'}
-      </div>
+      >meses</div>
     </div>
   </div>
 </div>
 
 <script>
-  // Animación de conteo del número principal
-  const el = document.getElementById('days-counter');
-  if (el) {
-    const target = parseInt(el.dataset.target ?? '0', 10);
-    const duration = 1400;
+  import { getStartDate, calcDays, formatDate } from '../scripts/dateStore.js';
+
+  function easeOutExpo(t: number): number {
+    return t === 1 ? 1 : 1 - Math.pow(2, -10 * t);
+  }
+
+  function animateCount(el: HTMLElement, target: number, duration = 1400) {
     const startTime = performance.now();
-
-    function easeOutExpo(t: number): number {
-      return t === 1 ? 1 : 1 - Math.pow(2, -10 * t);
-    }
-
     function update(now: number) {
       const elapsed = now - startTime;
       const progress = Math.min(elapsed / duration, 1);
-      const eased = easeOutExpo(progress);
-      el!.textContent = Math.round(eased * target).toString();
+      el.textContent = Math.round(easeOutExpo(progress) * target).toString();
       if (progress < 1) requestAnimationFrame(update);
     }
-
-    // Esperar a que la animación CSS de entrada termine antes de contar
     setTimeout(() => requestAnimationFrame(update), 300);
   }
+
+  function render() {
+    const startDate = getStartDate();
+    const totalDays = calcDays(startDate);
+    const weeks = Math.floor(totalDays / 7);
+    const months = (totalDays / 30.44).toFixed(1);
+
+    // Etiqueta de fecha
+    const dateLabel = document.getElementById('counter-date-label');
+    if (dateLabel) {
+      dateLabel.textContent = `Última chela — ${formatDate(startDate)}`;
+    }
+
+    // Número principal
+    const counterEl = document.getElementById('days-counter');
+    if (counterEl) {
+      counterEl.setAttribute('data-target', totalDays.toString());
+      animateCount(counterEl, totalDays);
+    }
+
+    // Semanas
+    const weeksEl = document.getElementById('counter-weeks');
+    const weeksLabel = document.getElementById('counter-weeks-label');
+    if (weeksEl) weeksEl.textContent = weeks.toString();
+    if (weeksLabel) weeksLabel.textContent = weeks === 1 ? 'semana' : 'semanas';
+
+    // Meses
+    const monthsEl = document.getElementById('counter-months');
+    const monthsLabel = document.getElementById('counter-months-label');
+    if (monthsEl) monthsEl.textContent = months;
+    if (monthsLabel) monthsLabel.textContent = parseFloat(months) === 1 ? 'mes' : 'meses';
+  }
+
+  render();
+
+  // Re-renderizar cuando el usuario configura su fecha
+  window.addEventListener('date-updated', render);
 </script>

@@ -3,6 +3,7 @@ import '../styles/global.css';
 import Counter from '../components/Counter.astro';
 import Milestones from '../components/Milestones.astro';
 import FunFacts from '../components/FunFacts.astro';
+import Onboarding from '../components/Onboarding.astro';
 ---
 
 <html lang="es">
@@ -63,6 +64,9 @@ import FunFacts from '../components/FunFacts.astro';
   </head>
 
   <body>
+    <!-- Modal de onboarding (primera visita) -->
+    <Onboarding />
+
     <!-- Decoración de fondo: líneas verticales tipo papel de bar -->
     <div
       aria-hidden="true"
@@ -165,7 +169,37 @@ import FunFacts from '../components/FunFacts.astro';
             onmouseout="this.style.color='var(--color-amber-dim)'"
           >Rodrigo Aizpuru</a>
         </p>
+        <!-- Botón discreto para cambiar/resetear la fecha -->
+        <button
+          id="reset-date-btn"
+          class="font-display uppercase tracking-widest"
+          style="
+            margin-top: 1.5rem;
+            background: none;
+            border: none;
+            color: oklch(40% 0.04 55);
+            font-size: 0.65rem;
+            cursor: pointer;
+            letter-spacing: 0.15em;
+            transition: color 0.2s;
+            padding: 0.25rem 0.5rem;
+          "
+          onmouseover="this.style.color='var(--color-muted)'"
+          onmouseout="this.style.color='oklch(40% 0.04 55)'"
+        >
+          cambiar mi fecha
+        </button>
       </footer>
     </main>
+
+    <script>
+      import { clearStartDate } from '../scripts/dateStore.js';
+
+      document.getElementById('reset-date-btn')?.addEventListener('click', () => {
+        clearStartDate();
+        const overlay = document.getElementById('onboarding-overlay');
+        if (overlay) overlay.style.display = 'flex';
+      });
+    </script>
   </body>
 </html>

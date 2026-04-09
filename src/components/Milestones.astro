@@ -1,91 +1,9 @@
 ---
 // Milestones.astro
-// Mapa de logros con nombres creativos — completados sellados, próximo destacado, futuros en penumbra
-
-const START_DATE = new Date('2026-01-13T00:00:00');
-const today = new Date();
-today.setHours(0, 0, 0, 0);
-const totalDays = Math.floor((today.getTime() - START_DATE.getTime()) / (1000 * 60 * 60 * 24));
-
-const milestones = [
-  {
-    days: 7,
-    label: 'La Prueba del Hígado',
-    sublabel: '1 semana',
-    message: 'El hígado abrió un ojo. Con desconfianza.',
-    icon: '🍺',
-  },
-  {
-    days: 14,
-    label: 'El Despertar',
-    sublabel: '2 semanas',
-    message: 'Empezaste a dormir como persona normal. Casi.',
-    icon: '😴',
-  },
-  {
-    days: 21,
-    label: 'La Tercera Semana',
-    sublabel: '3 semanas',
-    message: 'Las neuronas vuelven al trabajo. Con rezago.',
-    icon: '🧠',
-  },
-  {
-    days: 30,
-    label: 'El Primer Mes',
-    sublabel: '1 mes',
-    message: 'Un mes sin chela. El bar te dio el pésame.',
-    icon: '📅',
-  },
-  {
-    days: 60,
-    label: 'Dos Meses en Pie',
-    sublabel: '2 meses',
-    message: 'Ya ni te acordabas del sabor. Mentira, sí.',
-    icon: '🦾',
-  },
-  {
-    days: 90,
-    label: 'El Trimestre Sagrado',
-    sublabel: '3 meses',
-    message: 'Elite level. El hígado te mandó una tarjeta de agradecimiento.',
-    icon: '🏆',
-  },
-  {
-    days: 180,
-    label: 'El Medio Año',
-    sublabel: '6 meses',
-    message: 'Medio año. Ya eres casi una persona diferente.',
-    icon: '⚡',
-  },
-  {
-    days: 365,
-    label: 'El Año Completo',
-    sublabel: '1 año',
-    message: 'Un año sin chela. Monumento nacional. Leyenda viva.',
-    icon: '👑',
-  },
-  {
-    days: 730,
-    label: 'El Doble o Nada',
-    sublabel: '2 años',
-    message: 'Dos años. Ya no eres tú, eres una versión mejorada que da miedo.',
-    icon: '🌟',
-  },
-];
-
-const nextIndex = milestones.findIndex(m => totalDays < m.days);
-const completedMilestones = nextIndex === -1 ? milestones : milestones.slice(0, nextIndex);
-const nextMilestone = nextIndex !== -1 ? milestones[nextIndex] : null;
-const futureMilestones = nextIndex !== -1 ? milestones.slice(nextIndex + 1) : [];
-
-const prevMilestoneDays = nextIndex > 0 ? milestones[nextIndex - 1].days : 0;
-const segmentTotal = nextMilestone ? nextMilestone.days - prevMilestoneDays : 1;
-const segmentDone = totalDays - prevMilestoneDays;
-const segmentPct = Math.min((segmentDone / segmentTotal) * 100, 100);
-const daysToNext = nextMilestone ? nextMilestone.days - totalDays : null;
+// Mapa de logros — lee fecha de localStorage (client-side)
 ---
 
-  <div class="animate-fade-up delay-700" style="opacity: 0;">
+<div class="animate-fade-up delay-700" style="opacity: 0;">
 
   <!-- Título sección -->
   <div class="flex items-center gap-4 mb-10">
@@ -96,178 +14,134 @@ const daysToNext = nextMilestone ? nextMilestone.days - totalDays : null;
     <div class="h-px flex-1" style="background: linear-gradient(to left, transparent, oklch(72% 0.18 72 / 0.4));"></div>
   </div>
 
-  <!-- LOGROS COMPLETADOS -->
-  {completedMilestones.length > 0 && (
-    <div class="mb-8">
-      <div class="grid gap-2">
-        {completedMilestones.map((m, i) => (
-          <div
-            class="flex items-center gap-4 px-4 py-3 rounded-sm"
-            style="background: var(--color-bg-card); border: 1px solid oklch(72% 0.18 72 / 0.1); position: relative; overflow: hidden;"
-          >
-            <!-- Sello "LOGRADO" en esquina -->
-            <div
-              style="
-                position: absolute;
-                right: 10px;
-                top: 50%;
-                transform: translateY(-50%) rotate(0deg);
-                font-size: 0.55rem;
-                font-weight: 900;
-                letter-spacing: 0.15em;
-                font-family: var(--font-display);
-                color: var(--color-amber);
-                border: 1.5px solid var(--color-amber);
-                padding: 1px 6px;
-                opacity: 0.5;
-                text-transform: uppercase;
-                white-space: nowrap;
-              "
-            >
-              ✓ LOGRADO
-            </div>
-
-            <!-- Días -->
-            <div
-              class="font-display font-black text-center flex-shrink-0"
-              style="min-width: 2.5rem; color: var(--color-gold); font-size: 1.15rem; line-height: 1;"
-            >
-              {m.days}
-              <div class="font-display font-bold uppercase" style="font-size: 0.7rem; color: var(--color-amber-dim); letter-spacing: 0.1em;">días</div>
-            </div>
-
-            <!-- Separador vertical -->
-            <div style="width: 1px; height: 30px; background: oklch(72% 0.18 72 / 0.2); flex-shrink: 0;"></div>
-
-            <!-- Nombre y sublabel -->
-            <div class="flex-1 min-w-0">
-              <div
-                class="font-display font-black uppercase"
-                style="font-size: 0.9rem; letter-spacing: 0.05em; color: var(--color-cream); text-decoration: line-through; text-decoration-color: oklch(72% 0.18 72 / 0.5);"
-              >
-                {m.label}
-              </div>
-              <div class="font-body" style="font-size: 0.85rem; color: var(--color-cream-dim); margin-top: 2px;">
-                {m.sublabel}
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  )}
-
-  <!-- PRÓXIMO HITO — protagonista -->
-  {nextMilestone && (
-    <div
-      class="mb-8 p-5 rounded-sm"
-      style="
-        background: var(--color-bg-card);
-        border: 1px solid oklch(72% 0.18 72 / 0.25);
-        border-left: 4px solid var(--color-amber);
-        box-shadow: 0 0 30px oklch(72% 0.18 72 / 0.06);
-      "
-    >
-      <!-- Encabezado -->
-      <div class="flex items-start justify-between gap-4 mb-4">
-        <div>
-          <div class="font-display uppercase tracking-widest mb-1" style="font-size: 0.75rem; color: var(--color-cream-dim);">
-            Próximo logro
-          </div>
-          <div class="font-display font-black uppercase leading-tight" style="font-size: 1.3rem; color: var(--color-amber);">
-            {nextMilestone.label}
-          </div>
-          <div class="font-display uppercase tracking-wider mt-1" style="font-size: 0.85rem; color: var(--color-amber-dim);">
-            {nextMilestone.sublabel} — {nextMilestone.days} días
-          </div>
-        </div>
-
-        <!-- Días restantes -->
-        <div class="text-right flex-shrink-0">
-          <div class="font-display font-black leading-none" style="font-size: 2.5rem; color: var(--color-gold);">
-            {daysToNext}
-          </div>
-          <div class="font-display uppercase tracking-widest" style="font-size: 0.8rem; color: var(--color-cream-dim);">
-            {daysToNext === 1 ? 'día más' : 'días más'}
-          </div>
-        </div>
-      </div>
-
-      <!-- Barra de progreso del segmento actual -->
-      <div style="background: oklch(16% 0.03 55); height: 4px; border-radius: 2px; overflow: hidden; margin-bottom: 6px;">
-        <div
-          class="animate-line delay-900"
-          style={`
-            height: 100%;
-            width: ${segmentPct.toFixed(1)}%;
-            background: linear-gradient(to right, var(--color-amber-dim), var(--color-gold));
-            transform-origin: left;
-          `}
-        ></div>
-      </div>
-
-      <div class="flex justify-between">
-        <span class="font-body" style="font-size: 0.85rem; color: var(--color-muted);">
-          {nextIndex > 0 ? milestones[nextIndex - 1].sublabel : 'Inicio'}
-        </span>
-        <span class="font-body font-bold" style="font-size: 0.85rem; color: var(--color-amber);">
-          {segmentPct.toFixed(0)}% completado
-        </span>
-      </div>
-
-      <!-- Frase del hito -->
-      <p class="mt-4 font-serif italic text-center" style="font-size: 1rem; color: var(--color-cream-dim); border-top: 1px solid oklch(72% 0.18 72 / 0.12); padding-top: 0.8rem;">
-        &ldquo;{nextMilestone.message}&rdquo;
-      </p>
-    </div>
-  )}
-
-  <!-- HITOS FUTUROS — en penumbra -->
-  {futureMilestones.length > 0 && (
-    <div>
-      <div class="font-display uppercase tracking-widest text-center mb-3" style="font-size: 0.75rem; color: var(--color-muted);">
-        Lo que viene
-      </div>
-      <div class="grid gap-2">
-        {futureMilestones.map((m) => (
-          <div
-            class="flex items-center gap-4 px-4 py-3 rounded-sm"
-            style="background: oklch(16% 0.03 55); border: 1px solid oklch(28% 0.04 55);"
-          >
-            <!-- Días -->
-            <div
-              class="font-display font-black text-center flex-shrink-0"
-              style="min-width: 2.5rem; color: oklch(56% 0.08 65); font-size: 1.1rem; line-height: 1;"
-            >
-              {m.days}
-              <div class="font-display font-bold uppercase" style="font-size: 0.65rem; color: oklch(50% 0.06 65); letter-spacing: 0.1em;">días</div>
-            </div>
-
-            <!-- Separador vertical -->
-            <div style="width: 1px; height: 30px; background: oklch(30% 0.04 55); flex-shrink: 0;"></div>
-
-            <!-- Nombre -->
-            <div class="flex-1 min-w-0">
-              <div class="font-display font-black uppercase" style="font-size: 0.85rem; letter-spacing: 0.05em; color: oklch(58% 0.07 65);">
-                {m.label}
-              </div>
-              <div class="font-body" style="font-size: 0.8rem; color: oklch(52% 0.05 65); margin-top: 2px;">
-                {m.sublabel}
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  )}
-
-  <!-- Si ya completaste todo -->
-  {!nextMilestone && (
-    <div class="text-center py-6">
-      <p class="font-serif italic text-xl" style="color: var(--color-gold);">
-        &ldquo;Completaste todos los logros. Eres un fenómeno inhumano.&rdquo;
-      </p>
-    </div>
-  )}
+  <!-- Contenedor dinámico -->
+  <div id="milestones-content"></div>
 
 </div>
+
+<script>
+  import { getStartDate, calcDays } from '../scripts/dateStore.js';
+
+  const MILESTONES = [
+    { days: 7,   label: 'La Prueba del Hígado',  sublabel: '1 semana',  message: 'El hígado abrió un ojo. Con desconfianza.',                              icon: '🍺' },
+    { days: 14,  label: 'El Despertar',           sublabel: '2 semanas', message: 'Empezaste a dormir como persona normal. Casi.',                          icon: '😴' },
+    { days: 21,  label: 'La Tercera Semana',      sublabel: '3 semanas', message: 'Las neuronas vuelven al trabajo. Con rezago.',                           icon: '🧠' },
+    { days: 30,  label: 'El Primer Mes',          sublabel: '1 mes',     message: 'Un mes sin chela. El bar te dio el pésame.',                             icon: '📅' },
+    { days: 60,  label: 'Dos Meses en Pie',       sublabel: '2 meses',   message: 'Ya ni te acordabas del sabor. Mentira, sí.',                             icon: '🦾' },
+    { days: 90,  label: 'El Trimestre Sagrado',   sublabel: '3 meses',   message: 'Elite level. El hígado te mandó una tarjeta de agradecimiento.',         icon: '🏆' },
+    { days: 180, label: 'El Medio Año',           sublabel: '6 meses',   message: 'Medio año. Ya eres casi una persona diferente.',                         icon: '⚡' },
+    { days: 365, label: 'El Año Completo',        sublabel: '1 año',     message: 'Un año sin chela. Monumento nacional. Leyenda viva.',                    icon: '👑' },
+    { days: 730, label: 'El Doble o Nada',        sublabel: '2 años',    message: 'Dos años. Ya no eres tú, eres una versión mejorada que da miedo.',       icon: '🌟' },
+  ];
+
+  function render() {
+    const container = document.getElementById('milestones-content');
+    if (!container) return;
+
+    const startDate = getStartDate();
+    const totalDays = calcDays(startDate);
+
+    const nextIndex = MILESTONES.findIndex(m => totalDays < m.days);
+    const completed = nextIndex === -1 ? MILESTONES : MILESTONES.slice(0, nextIndex);
+    const next = nextIndex !== -1 ? MILESTONES[nextIndex] : null;
+    const future = nextIndex !== -1 ? MILESTONES.slice(nextIndex + 1) : [];
+
+    const prevDays = nextIndex > 0 ? MILESTONES[nextIndex - 1].days : 0;
+    const segmentTotal = next ? next.days - prevDays : 1;
+    const segmentDone = totalDays - prevDays;
+    const segmentPct = Math.min((segmentDone / segmentTotal) * 100, 100);
+    const daysToNext = next ? next.days - totalDays : null;
+
+    let html = '';
+
+    // COMPLETADOS
+    if (completed.length > 0) {
+      html += `<div class="mb-8"><div class="grid gap-2">`;
+      for (const m of completed) {
+        html += `
+          <div class="flex items-center gap-4 px-4 py-3 rounded-sm" style="background: var(--color-bg-card); border: 1px solid oklch(72% 0.18 72 / 0.1); position: relative; overflow: hidden;">
+            <div style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%); font-size: 0.55rem; font-weight: 900; letter-spacing: 0.15em; font-family: var(--font-display); color: var(--color-amber); border: 1.5px solid var(--color-amber); padding: 1px 6px; opacity: 0.5; text-transform: uppercase; white-space: nowrap;">
+              ✓ LOGRADO
+            </div>
+            <div class="font-display font-black text-center flex-shrink-0" style="min-width: 2.5rem; color: var(--color-gold); font-size: 1.15rem; line-height: 1;">
+              ${m.days}
+              <div class="font-display font-bold uppercase" style="font-size: 0.7rem; color: var(--color-amber-dim); letter-spacing: 0.1em;">días</div>
+            </div>
+            <div style="width: 1px; height: 30px; background: oklch(72% 0.18 72 / 0.2); flex-shrink: 0;"></div>
+            <div class="flex-1 min-w-0">
+              <div class="font-display font-black uppercase" style="font-size: 0.9rem; letter-spacing: 0.05em; color: var(--color-cream); text-decoration: line-through; text-decoration-color: oklch(72% 0.18 72 / 0.5);">${m.label}</div>
+              <div class="font-body" style="font-size: 0.85rem; color: var(--color-cream-dim); margin-top: 2px;">${m.sublabel}</div>
+            </div>
+          </div>`;
+      }
+      html += `</div></div>`;
+    }
+
+    // PRÓXIMO
+    if (next) {
+      const prevLabel = nextIndex > 0 ? MILESTONES[nextIndex - 1].sublabel : 'Inicio';
+      html += `
+        <div class="mb-8 p-5 rounded-sm" style="background: var(--color-bg-card); border: 1px solid oklch(72% 0.18 72 / 0.25); border-left: 4px solid var(--color-amber); box-shadow: 0 0 30px oklch(72% 0.18 72 / 0.06);">
+          <div class="flex items-start justify-between gap-4 mb-4">
+            <div>
+              <div class="font-display uppercase tracking-widest mb-1" style="font-size: 0.75rem; color: var(--color-cream-dim);">Próximo logro</div>
+              <div class="font-display font-black uppercase leading-tight" style="font-size: 1.3rem; color: var(--color-amber);">${next.label}</div>
+              <div class="font-display uppercase tracking-wider mt-1" style="font-size: 0.85rem; color: var(--color-amber-dim);">${next.sublabel} — ${next.days} días</div>
+            </div>
+            <div class="text-right flex-shrink-0">
+              <div class="font-display font-black leading-none" style="font-size: 2.5rem; color: var(--color-gold);">${daysToNext}</div>
+              <div class="font-display uppercase tracking-widest" style="font-size: 0.8rem; color: var(--color-cream-dim);">${daysToNext === 1 ? 'día más' : 'días más'}</div>
+            </div>
+          </div>
+          <div style="background: oklch(16% 0.03 55); height: 4px; border-radius: 2px; overflow: hidden; margin-bottom: 6px;">
+            <div style="height: 100%; width: ${segmentPct.toFixed(1)}%; background: linear-gradient(to right, var(--color-amber-dim), var(--color-gold)); transform-origin: left;"></div>
+          </div>
+          <div class="flex justify-between">
+            <span class="font-body" style="font-size: 0.85rem; color: var(--color-muted);">${prevLabel}</span>
+            <span class="font-body font-bold" style="font-size: 0.85rem; color: var(--color-amber);">${segmentPct.toFixed(0)}% completado</span>
+          </div>
+          <p class="mt-4 font-serif italic text-center" style="font-size: 1rem; color: var(--color-cream-dim); border-top: 1px solid oklch(72% 0.18 72 / 0.12); padding-top: 0.8rem;">
+            &ldquo;${next.message}&rdquo;
+          </p>
+        </div>`;
+    }
+
+    // FUTUROS
+    if (future.length > 0) {
+      html += `
+        <div>
+          <div class="font-display uppercase tracking-widest text-center mb-3" style="font-size: 0.75rem; color: var(--color-muted);">Lo que viene</div>
+          <div class="grid gap-2">`;
+      for (const m of future) {
+        html += `
+          <div class="flex items-center gap-4 px-4 py-3 rounded-sm" style="background: oklch(16% 0.03 55); border: 1px solid oklch(28% 0.04 55);">
+            <div class="font-display font-black text-center flex-shrink-0" style="min-width: 2.5rem; color: oklch(56% 0.08 65); font-size: 1.1rem; line-height: 1;">
+              ${m.days}
+              <div class="font-display font-bold uppercase" style="font-size: 0.65rem; color: oklch(50% 0.06 65); letter-spacing: 0.1em;">días</div>
+            </div>
+            <div style="width: 1px; height: 30px; background: oklch(30% 0.04 55); flex-shrink: 0;"></div>
+            <div class="flex-1 min-w-0">
+              <div class="font-display font-black uppercase" style="font-size: 0.85rem; letter-spacing: 0.05em; color: oklch(58% 0.07 65);">${m.label}</div>
+              <div class="font-body" style="font-size: 0.8rem; color: oklch(52% 0.05 65); margin-top: 2px;">${m.sublabel}</div>
+            </div>
+          </div>`;
+      }
+      html += `</div></div>`;
+    }
+
+    // Todo completado
+    if (!next) {
+      html += `
+        <div class="text-center py-6">
+          <p class="font-serif italic text-xl" style="color: var(--color-gold);">
+            &ldquo;Completaste todos los logros. Eres un fenómeno inhumano.&rdquo;
+          </p>
+        </div>`;
+    }
+
+    container.innerHTML = html;
+  }
+
+  render();
+  window.addEventListener('date-updated', render);
+</script>

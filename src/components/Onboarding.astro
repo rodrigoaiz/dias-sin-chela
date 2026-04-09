@@ -1,0 +1,169 @@
+---
+// Onboarding.astro
+// Modal que aparece la primera vez que el usuario visita la app
+// Se muestra si no hay fecha guardada en localStorage
+---
+
+<!-- Overlay del modal -->
+<div
+  id="onboarding-overlay"
+  style="
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    background: oklch(8% 0.02 55 / 0.92);
+    backdrop-filter: blur(4px);
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+  "
+>
+  <!-- Tarjeta del modal -->
+  <div
+    style="
+      width: 100%;
+      max-width: 440px;
+      background: var(--color-bg-card);
+      border: 1px solid oklch(72% 0.18 72 / 0.2);
+      border-top: 3px solid var(--color-amber);
+      padding: 2.5rem 2rem 2rem;
+      position: relative;
+    "
+  >
+    <!-- Doble línea interna decorativa -->
+    <div style="
+      position: absolute;
+      top: 8px; left: 8px; right: 8px; bottom: 8px;
+      border-top: 1px solid oklch(72% 0.18 72 / 0.15);
+      pointer-events: none;
+    "></div>
+
+    <!-- Header -->
+    <div class="text-center mb-8">
+      <p
+        class="font-display font-black uppercase tracking-[0.4em] mb-3"
+        style="font-size: 0.7rem; color: var(--color-amber);"
+      >
+        Bitácora personal
+      </p>
+      <h2
+        class="font-display font-black uppercase leading-tight"
+        style="font-size: clamp(1.6rem, 5vw, 2.2rem); color: var(--color-cream);"
+      >
+        ¿Cuándo fue tu<br/>última chela?
+      </h2>
+      <p
+        class="font-serif italic mt-3"
+        style="font-size: 0.95rem; color: var(--color-cream-dim); line-height: 1.5;"
+      >
+        &ldquo;Sin juzgar. Solo contamos.&rdquo;
+      </p>
+    </div>
+
+    <!-- Formulario -->
+    <form id="onboarding-form">
+      <div class="mb-6">
+        <label
+          for="last-beer-date"
+          class="font-display uppercase tracking-widest block mb-2"
+          style="font-size: 0.7rem; color: var(--color-muted);"
+        >
+          Fecha de la última chela
+        </label>
+        <input
+          type="date"
+          id="last-beer-date"
+          name="last-beer-date"
+          required
+          style="
+            width: 100%;
+            background: oklch(14% 0.03 55);
+            border: 1px solid oklch(72% 0.18 72 / 0.25);
+            color: var(--color-cream);
+            font-family: var(--font-display);
+            font-size: 1.1rem;
+            padding: 0.75rem 1rem;
+            outline: none;
+            box-sizing: border-box;
+            color-scheme: dark;
+          "
+        />
+        <p
+          id="onboarding-error"
+          style="display: none; font-size: 0.8rem; color: oklch(65% 0.18 25); margin-top: 0.5rem; font-family: var(--font-body);"
+        >
+          La fecha no puede ser en el futuro.
+        </p>
+      </div>
+
+      <button
+        type="submit"
+        class="font-display font-black uppercase tracking-[0.2em] w-full"
+        style="
+          background: var(--color-amber);
+          color: oklch(12% 0.03 55);
+          border: none;
+          padding: 0.85rem 1rem;
+          font-size: 0.9rem;
+          cursor: pointer;
+          transition: background 0.2s;
+          width: 100%;
+        "
+        onmouseover="this.style.background='var(--color-gold)'"
+        onmouseout="this.style.background='var(--color-amber)'"
+      >
+        Empezar a contar
+      </button>
+    </form>
+
+    <!-- Nota de privacidad -->
+    <p
+      class="text-center font-body mt-4"
+      style="font-size: 0.72rem; color: var(--color-muted); line-height: 1.5;"
+    >
+      Tu fecha se guarda solo en este dispositivo.<br/>No se comparte con nadie.
+    </p>
+  </div>
+</div>
+
+<script>
+  import { hasUserDate, setStartDate } from '../scripts/dateStore.js';
+
+  const overlay = document.getElementById('onboarding-overlay');
+  const form = document.getElementById('onboarding-form');
+  const input = document.getElementById('last-beer-date') as HTMLInputElement;
+  const errorMsg = document.getElementById('onboarding-error');
+
+  // Mostrar el modal si no hay fecha guardada
+  if (!hasUserDate()) {
+    overlay!.style.display = 'flex';
+    // Poner fecha máxima de hoy
+    const today = new Date().toISOString().split('T')[0];
+    input.max = today;
+    // Sugerir hoy como valor inicial
+    input.value = today;
+  }
+
+  form?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const value = input.value;
+    if (!value) return;
+
+    // Validar que no sea en el futuro
+    const selected = new Date(value + 'T00:00:00');
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    if (selected > today) {
+      errorMsg!.style.display = 'block';
+      return;
+    }
+
+    errorMsg!.style.display = 'none';
+    setStartDate(value);
+    overlay!.style.display = 'none';
+
+    // Disparar evento para que los componentes actualicen sus datos
+    window.dispatchEvent(new CustomEvent('date-updated'));
+  });
+</script>
