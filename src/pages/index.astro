@@ -111,6 +111,31 @@ import Onboarding from '../components/Onboarding.astro';
             Bitácora de sobriedad
           </p>
         </div>
+
+        <!-- Toggle: Mi contador / Rodrigo -->
+        <div id="mode-toggle" class="items-center justify-center gap-1 mt-6" style="display: none;">
+          <button
+            id="btn-mine"
+            class="font-display uppercase tracking-widest"
+            style="
+              background: none; border: none; cursor: pointer;
+              font-size: 0.65rem; padding: 0.3rem 0.8rem;
+              letter-spacing: 0.15em; transition: all 0.2s;
+              border: 1px solid transparent;
+            "
+          >Mi contador</button>
+          <span style="color: oklch(35% 0.04 55); font-size: 0.7rem;">·</span>
+          <button
+            id="btn-dev"
+            class="font-display uppercase tracking-widest"
+            style="
+              background: none; border: none; cursor: pointer;
+              font-size: 0.65rem; padding: 0.3rem 0.8rem;
+              letter-spacing: 0.15em; transition: all 0.2s;
+              border: 1px solid transparent;
+            "
+          >Rodrigo</button>
+        </div>
       </header>
 
       <!-- Contador principal -->
@@ -193,12 +218,54 @@ import Onboarding from '../components/Onboarding.astro';
     </main>
 
     <script>
-      import { clearStartDate } from '../scripts/dateStore.js';
+      import { clearStartDate, getMode, setMode, hasUserDate } from '../scripts/dateStore.js';
 
+      // ── Reset de fecha ──────────────────────────────────────────────
       document.getElementById('reset-date-btn')?.addEventListener('click', () => {
         clearStartDate();
         const overlay = document.getElementById('onboarding-overlay');
         if (overlay) overlay.style.display = 'flex';
+      });
+
+      // ── Toggle Mi contador / Rodrigo ────────────────────────────────
+      const btnMine = document.getElementById('btn-mine') as HTMLButtonElement;
+      const btnDev  = document.getElementById('btn-dev')  as HTMLButtonElement;
+
+      function updateToggle(mode: string) {
+        // Estilos activo/inactivo
+        [btnMine, btnDev].forEach(btn => {
+          const isActive = (btn.id === 'btn-mine' && mode === 'mine') || (btn.id === 'btn-dev' && mode === 'dev');
+          btn.style.color = isActive ? 'var(--color-amber)' : 'oklch(38% 0.04 55)';
+          btn.style.borderColor = isActive ? 'oklch(72% 0.18 72 / 0.3)' : 'transparent';
+        });
+        // Ocultar "cambiar mi fecha" cuando se ve el contador del dev
+        const resetBtn = document.getElementById('reset-date-btn') as HTMLButtonElement;
+        if (resetBtn) resetBtn.style.display = mode === 'dev' ? 'none' : '';
+      }
+
+      function checkToggleVisibility() {
+        const toggle = document.getElementById('mode-toggle');
+        if (toggle) toggle.style.display = hasUserDate() ? 'flex' : 'none';
+      }
+
+      checkToggleVisibility();
+      updateToggle(getMode());
+
+      btnMine?.addEventListener('click', () => {
+        setMode('mine');
+        updateToggle('mine');
+        window.dispatchEvent(new CustomEvent('date-updated'));
+      });
+
+      btnDev?.addEventListener('click', () => {
+        setMode('dev');
+        updateToggle('dev');
+        window.dispatchEvent(new CustomEvent('date-updated'));
+      });
+
+      // Mostrar toggle cuando el usuario guarda su fecha
+      window.addEventListener('date-updated', () => {
+        checkToggleVisibility();
       });
     </script>
   </body>

@@ -2,18 +2,24 @@
 // Helper para leer/escribir la fecha de última chela en localStorage
 
 const LS_KEY = 'dias-sin-chela:last-beer-date';
-const FALLBACK_DATE = '2026-01-13'; // fecha del dueño, se usa si no hay nada guardado
+const MODE_KEY = 'dias-sin-chela:mode'; // 'mine' | 'dev'
+export const DEV_DATE = '2026-01-13'; // fecha hardcodeada del creador
 
 /**
  * Retorna la fecha de última chela como objeto Date.
- * Si el usuario no ha configurado la suya, usa el fallback.
+ * Si está en modo 'dev', usa la fecha del creador.
+ * Si el usuario no tiene fecha propia, usa la del dev como fallback.
  */
 export function getStartDate() {
+  const mode = getMode();
+  if (mode === 'dev') {
+    return new Date(DEV_DATE + 'T00:00:00');
+  }
   const stored = localStorage.getItem(LS_KEY);
   if (stored) {
     return new Date(stored + 'T00:00:00');
   }
-  return new Date(FALLBACK_DATE + 'T00:00:00');
+  return new Date(DEV_DATE + 'T00:00:00');
 }
 
 /**
@@ -35,6 +41,20 @@ export function setStartDate(dateString) {
  */
 export function clearStartDate() {
   localStorage.removeItem(LS_KEY);
+}
+
+/**
+ * Retorna el modo actual: 'mine' o 'dev'.
+ */
+export function getMode() {
+  return localStorage.getItem(MODE_KEY) || 'mine';
+}
+
+/**
+ * Cambia el modo de vista.
+ */
+export function setMode(mode) {
+  localStorage.setItem(MODE_KEY, mode);
 }
 
 /**

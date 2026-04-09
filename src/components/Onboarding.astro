@@ -128,7 +128,7 @@
 </div>
 
 <script>
-  import { hasUserDate, setStartDate } from '../scripts/dateStore.js';
+  import { hasUserDate, setStartDate, setMode } from '../scripts/dateStore.js';
 
   const overlay = document.getElementById('onboarding-overlay');
   const form = document.getElementById('onboarding-form');
@@ -161,6 +161,7 @@
 
     errorMsg!.style.display = 'none';
     setStartDate(value);
+    setMode('mine'); // asegurar modo propio al guardar fecha
     overlay!.style.display = 'none';
 
     // Disparar evento para que los componentes actualicen sus datos
