@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://dias-sin-chela.vercel.app/sitemap-index.xml

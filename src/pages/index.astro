@@ -11,8 +11,48 @@ import FunFacts from '../components/FunFacts.astro';
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="generator" content={Astro.generator} />
-    <title>Días Sin Chela</title>
-    <meta name="description" content="Contador de días sin tomar cerveza. Cada día cuenta." />
+
+    <!-- SEO básico -->
+    <title>Días Sin Chela — Contador de sobriedad</title>
+    <meta name="description" content="Contador de días sin tomar cerveza. Lleva tu racha de sobriedad, visualiza tus logros y celebra cada día sin chela." />
+    <meta name="keywords" content="días sin chela, contador sobriedad, dejar de tomar, días sin beber, racha sin alcohol, sobriedad" />
+    <meta name="author" content="Rodrigo Aizpuru" />
+    <link rel="canonical" href="https://dias-sin-chela.vercel.app/" />
+    <meta name="robots" content="index, follow" />
+
+    <!-- Open Graph (Facebook, WhatsApp, etc.) -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://dias-sin-chela.vercel.app/" />
+    <meta property="og:title" content="Días Sin Chela — Contador de sobriedad" />
+    <meta property="og:description" content="Lleva tu racha de días sin tomar cerveza. Visualiza tus logros y celebra cada día sin chela." />
+    <meta property="og:locale" content="es_MX" />
+    <meta property="og:site_name" content="Días Sin Chela" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="Días Sin Chela — Contador de sobriedad" />
+    <meta name="twitter:description" content="Lleva tu racha de días sin tomar cerveza. Visualiza tus logros y celebra cada día sin chela." />
+    <meta name="twitter:creator" content="@rodrigoaiz" />
+
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json">
+      {JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "Días Sin Chela",
+        "description": "Contador de días sin tomar cerveza. Lleva tu racha de sobriedad y visualiza tus logros.",
+        "url": "https://dias-sin-chela.vercel.app/",
+        "applicationCategory": "HealthApplication",
+        "inLanguage": "es-MX",
+        "author": {
+          "@type": "Person",
+          "name": "Rodrigo Aizpuru",
+          "url": "https://github.com/rodrigoaiz"
+        }
+      })}
+    </script>
+
+    <!-- Microsoft Clarity -->
     <script type="text/javascript">
       (function(c,l,a,r,i,t,y){
         c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
