@@ -14,8 +14,8 @@ const months = (totalDays / 30.44).toFixed(1);
 <div class="text-center">
   <!-- Etiqueta superior estilo vintage -->
   <p
-    class="animate-fade delay-100 font-display uppercase tracking-[0.35em] text-sm mb-6"
-    style="color: var(--color-amber-dim); opacity: 0;"
+    class="animate-fade delay-100 font-display uppercase tracking-[0.35em] mb-6"
+    style="font-size: 0.9rem; color: var(--color-amber); opacity: 0;"
   >
     Última chela &mdash; 13 enero 2026
   </p>
@@ -62,14 +62,14 @@ const months = (totalDays / 30.44).toFixed(1);
         {weeks}
       </div>
       <div
-        class="font-display uppercase tracking-widest text-xs mt-1"
-        style="color: var(--color-muted);"
+        class="font-display uppercase tracking-widest mt-1"
+        style="font-size: 0.8rem; color: var(--color-cream-dim); letter-spacing: 0.12em;"
       >
         {weeks === 1 ? 'semana' : 'semanas'}
       </div>
     </div>
 
-    <div style="width: 1px; background: var(--color-bg-card);"></div>
+    <div style="width: 1px; background: oklch(72% 0.18 72 / 0.25);"></div>
 
     <div class="text-center">
       <div
@@ -79,8 +79,8 @@ const months = (totalDays / 30.44).toFixed(1);
         {months}
       </div>
       <div
-        class="font-display uppercase tracking-widest text-xs mt-1"
-        style="color: var(--color-muted);"
+        class="font-display uppercase tracking-widest mt-1"
+        style="font-size: 0.8rem; color: var(--color-cream-dim); letter-spacing: 0.12em;"
       >
         {parseFloat(months) === 1 ? 'mes' : 'meses'}
       </div>

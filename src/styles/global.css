@@ -11,13 +11,13 @@
   --color-bg:        oklch(14% 0.03 60);
   --color-bg-mid:    oklch(18% 0.04 58);
   --color-bg-card:   oklch(22% 0.05 55);
-  --color-amber:     oklch(72% 0.18 72);
-  --color-amber-dim: oklch(58% 0.14 70);
-  --color-cream:     oklch(93% 0.04 85);
-  --color-cream-dim: oklch(75% 0.05 80);
-  --color-gold:      oklch(80% 0.16 78);
+  --color-amber:     oklch(74% 0.18 72);
+  --color-amber-dim: oklch(68% 0.15 70);
+  --color-cream:     oklch(95% 0.03 85);
+  --color-cream-dim: oklch(88% 0.04 80);
+  --color-gold:      oklch(82% 0.16 78);
   --color-rust:      oklch(52% 0.18 45);
-  --color-muted:     oklch(45% 0.04 60);
+  --color-muted:     oklch(72% 0.05 65);
 }
 
 * {
