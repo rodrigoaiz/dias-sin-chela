@@ -1,0 +1,114 @@
+---
+import '../styles/global.css';
+import Counter from '../components/Counter.astro';
+import Milestones from '../components/Milestones.astro';
+import FunFacts from '../components/FunFacts.astro';
+---
+
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+    <title>Días Sin Chela</title>
+    <meta name="description" content="Contador de días sin tomar cerveza. Cada día cuenta." />
+  </head>
+
+  <body>
+    <!-- Decoración de fondo: líneas verticales tipo papel de bar -->
+    <div
+      aria-hidden="true"
+      style="
+        position: fixed; inset: 0; pointer-events: none; z-index: 0;
+        background-image: repeating-linear-gradient(
+          90deg,
+          oklch(72% 0.18 72 / 0.025) 0px,
+          oklch(72% 0.18 72 / 0.025) 1px,
+          transparent 1px,
+          transparent 80px
+        );
+      "
+    ></div>
+
+    <main style="position: relative; z-index: 1;">
+      <!-- Header tipo etiqueta de cerveza -->
+      <header class="text-center pt-16 pb-8 px-6 animate-fade" style="opacity: 0;">
+        <div
+          class="inline-block px-10 py-3"
+          style="
+            border-top: 3px solid var(--color-amber);
+            border-bottom: 3px solid var(--color-amber);
+            position: relative;
+          "
+        >
+          <div
+            style="
+              position: absolute; top: 5px; left: 5px; right: 5px; bottom: 5px;
+              border-top: 1px solid oklch(72% 0.18 72 / 0.4);
+              border-bottom: 1px solid oklch(72% 0.18 72 / 0.4);
+            "
+          ></div>
+          <p
+            class="font-display font-black uppercase"
+            style="
+              letter-spacing: 0.5em;
+              font-size: clamp(0.65rem, 2vw, 0.85rem);
+              color: var(--color-amber);
+            "
+          >
+            Bitácora de sobriedad
+          </p>
+        </div>
+      </header>
+
+      <!-- Contador principal -->
+      <section class="px-6 py-8">
+        <Counter />
+      </section>
+
+      <!-- Separador ornamental grueso -->
+      <div class="flex justify-center px-6 py-4 animate-fade delay-600" style="opacity: 0;">
+        <div style="width: 100%; max-width: 600px; display: flex; flex-direction: column; align-items: center; gap: 4px;">
+          <div style="width: 100%; height: 1px; background: oklch(72% 0.18 72 / 0.2);"></div>
+          <div style="width: 100%; height: 3px; background: oklch(72% 0.18 72 / 0.08);"></div>
+          <div style="width: 100%; height: 1px; background: oklch(72% 0.18 72 / 0.2);"></div>
+        </div>
+      </div>
+
+      <!-- Sección de hitos -->
+      <section class="px-6 py-12 max-w-2xl mx-auto">
+        <Milestones />
+      </section>
+
+      <!-- Separador -->
+      <div class="flex justify-center px-6 animate-fade delay-800" style="opacity: 0;">
+        <div style="width: 100%; max-width: 600px; display: flex; flex-direction: column; align-items: center; gap: 4px;">
+          <div style="width: 100%; height: 1px; background: oklch(72% 0.18 72 / 0.2);"></div>
+          <div style="width: 100%; height: 3px; background: oklch(72% 0.18 72 / 0.08);"></div>
+          <div style="width: 100%; height: 1px; background: oklch(72% 0.18 72 / 0.2);"></div>
+        </div>
+      </div>
+
+      <!-- Sección de fun facts -->
+      <section class="px-6 py-12 max-w-2xl mx-auto">
+        <FunFacts />
+      </section>
+
+      <!-- Footer -->
+      <footer
+        class="text-center pb-12 pt-4 animate-fade delay-1200"
+        style="opacity: 0;"
+      >
+        <div class="flex items-center justify-center gap-4 mb-4">
+          <div style="height:1px; width:3rem; background: oklch(72% 0.18 72 / 0.2);"></div>
+          <span style="color: var(--color-muted); font-size: 0.7rem;">✦</span>
+          <div style="height:1px; width:3rem; background: oklch(72% 0.18 72 / 0.2);"></div>
+        </div>
+        <p class="font-display uppercase tracking-[0.3em] text-xs" style="color: var(--color-muted);">
+          Un día a la vez
+        </p>
+      </footer>
+    </main>
+  </body>
+</html>

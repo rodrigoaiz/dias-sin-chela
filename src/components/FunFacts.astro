@@ -1,0 +1,129 @@
+---
+// FunFacts.astro
+// Equivalencias y frases autocríticas con humor
+
+const START_DATE = new Date('2026-01-13T00:00:00');
+const today = new Date();
+today.setHours(0, 0, 0, 0);
+const totalDays = Math.floor((today.getTime() - START_DATE.getTime()) / (1000 * 60 * 60 * 24));
+
+// Estimaciones (con base en promedios "típicos" de alguien que toma ocasionalmente)
+const cervezasEvitadas = Math.round(totalDays * 1.4); // ~1.4 cervezas/día promedio
+const litrosEvitados = (cervezasEvitadas * 0.355).toFixed(1); // 355ml por cerveza
+const pesosSalvados = (cervezasEvitadas * 35).toLocaleString('es-MX'); // ~$35 por cerveza
+const calorias = (cervezasEvitadas * 150).toLocaleString('es-MX'); // ~150 cal por cerveza
+const horasSueno = Math.round(totalDays * 0.5); // mejora aprox 30min sueño por noche
+const resacasEvitadas = Math.round(totalDays * 0.3); // ~resaca cada 3 días
+
+// Frase según el rango de días
+function getPhrase(days: number): { short: string; long: string } {
+  if (days < 7)   return { short: 'Recién empezando', long: '¿Ya extrañas el sabor o todavía estás en shock?' };
+  if (days < 14)  return { short: 'Una semana sobrevivida', long: 'El hígado te mandó un mensaje de voz agradeciéndote.' };
+  if (days < 30)  return { short: 'Racha respetable', long: 'Tus amigos ya creen que te convertiste en otra persona. Y tienen razón.' };
+  if (days < 60)  return { short: 'Un mes completo', long: 'En este punto el barman ya preguntó si sigues vivo.' };
+  if (days < 90)  return { short: 'Dos meses de carácter', long: 'Ya te ofrecieron una y dijiste que no. Eso no es humano, eso es poder.' };
+  if (days < 180) return { short: 'Tres meses legendarios', long: 'Si el hígado pudiera hablar, estaría llorando de la emoción.' };
+  if (days < 365) return { short: 'Medio año, respeto absoluto', long: 'Ya ni eres el mismo. Eres una versión premium de ti mismo.' };
+  return { short: 'Un año entero', long: 'No hay palabras. Solo un aplauso lento y respetuoso.' };
+}
+
+const phrase = getPhrase(totalDays);
+
+const facts = [
+  {
+    value: cervezasEvitadas.toLocaleString('es-MX'),
+    unit: 'cervezas',
+    detail: 'que les dijiste que no (sin contar las que ni te ofrecieron)',
+  },
+  {
+    value: `${litrosEvitados}L`,
+    unit: 'de cebada',
+    detail: 'que ya no están circulando por tu torrente sanguíneo',
+  },
+  {
+    value: `$${pesosSalvados}`,
+    unit: 'pesos',
+    detail: 'que no se fueron en caguamas (pueden irse en otras cosas igualmente malas)',
+  },
+  {
+    value: calorias,
+    unit: 'calorías',
+    detail: 'que no llegaron a tu panza. El cinturón nota la diferencia.',
+  },
+  {
+    value: `${horasSueno}h`,
+    unit: 'de sueño',
+    detail: 'extra de calidad que ganaste sin despertarte a las 3am con sed',
+  },
+  {
+    value: resacasEvitadas.toString(),
+    unit: 'resacas',
+    detail: 'que no existieron. Tus domingos jamás te lo van a agradecer suficiente.',
+  },
+];
+---
+
+<div class="animate-fade-up delay-900" style="opacity: 0;">
+  <!-- Título sección -->
+  <div class="flex items-center gap-4 mb-8">
+    <div
+      class="h-px flex-1"
+      style="background: linear-gradient(to right, transparent, var(--color-amber-dim));"
+    ></div>
+    <h2
+      class="font-display font-bold uppercase tracking-[0.3em] text-sm"
+      style="color: var(--color-amber-dim);"
+    >
+      El balance
+    </h2>
+    <div
+      class="h-px flex-1"
+      style="background: linear-gradient(to left, transparent, var(--color-amber-dim));"
+    ></div>
+  </div>
+
+  <!-- Frase autocrítica principal -->
+  <div class="text-center mb-10">
+    <p
+      class="font-display font-black uppercase tracking-wide mb-2"
+      style="font-size: clamp(1.4rem, 4vw, 2rem); color: var(--color-amber);"
+    >
+      {phrase.short}
+    </p>
+    <p class="font-serif italic" style="color: var(--color-cream-dim); font-size: 1.05rem; max-width: 38ch; margin: 0 auto;">
+      &ldquo;{phrase.long}&rdquo;
+    </p>
+  </div>
+
+  <!-- Grid de datos -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 max-w-2xl mx-auto">
+    {facts.map((fact, i) => (
+      <div
+        class="p-5 rounded-sm"
+        style={`
+          background: var(--color-bg-card);
+          border-top: 2px solid var(--color-amber-dim);
+          animation: fade-in-up 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+          animation-delay: ${1.0 + i * 0.1}s;
+          opacity: 0;
+        `}
+      >
+        <div
+          class="font-display font-black leading-none"
+          style="font-size: clamp(1.8rem, 5vw, 2.4rem); color: var(--color-gold);"
+        >
+          {fact.value}
+        </div>
+        <div
+          class="font-display font-bold uppercase tracking-widest text-xs mt-1 mb-2"
+          style="color: var(--color-amber-dim);"
+        >
+          {fact.unit}
+        </div>
+        <p class="font-body text-xs leading-relaxed" style="color: var(--color-muted);">
+          {fact.detail}
+        </p>
+      </div>
+    ))}
+  </div>
+</div>

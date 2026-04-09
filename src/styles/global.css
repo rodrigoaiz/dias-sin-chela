@@ -1,0 +1,89 @@
+@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;700;900&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Barlow:wght@300;400;500&display=swap');
+
+@import "tailwindcss";
+
+@theme {
+  --font-display: 'Barlow Condensed', sans-serif;
+  --font-serif: 'Playfair Display', serif;
+  --font-body: 'Barlow', sans-serif;
+
+  /* Paleta vintage bar */
+  --color-bg:        oklch(14% 0.03 60);
+  --color-bg-mid:    oklch(18% 0.04 58);
+  --color-bg-card:   oklch(22% 0.05 55);
+  --color-amber:     oklch(72% 0.18 72);
+  --color-amber-dim: oklch(58% 0.14 70);
+  --color-cream:     oklch(93% 0.04 85);
+  --color-cream-dim: oklch(75% 0.05 80);
+  --color-gold:      oklch(80% 0.16 78);
+  --color-rust:      oklch(52% 0.18 45);
+  --color-muted:     oklch(45% 0.04 60);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  background-color: var(--color-bg);
+  color: var(--color-cream);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  margin: 0;
+  min-height: 100dvh;
+  background-color: var(--color-bg);
+  background-image:
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  background-size: 200px 200px;
+}
+
+@keyframes count-up {
+  from { opacity: 0; transform: translateY(30px) scale(0.9); }
+  to   { opacity: 1; transform: translateY(0)    scale(1); }
+}
+
+@keyframes fade-in-up {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes line-grow {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
+}
+
+@keyframes pulse-amber {
+  0%, 100% { opacity: 0.6; }
+  50%       { opacity: 1; }
+}
+
+.animate-count   { animation: count-up   0.8s cubic-bezier(0.16, 1, 0.3, 1) both; }
+.animate-fade-up { animation: fade-in-up 0.7s cubic-bezier(0.16, 1, 0.3, 1) both; }
+.animate-fade    { animation: fade-in    0.6s ease both; }
+.animate-line    { animation: line-grow  0.9s cubic-bezier(0.16, 1, 0.3, 1) both; transform-origin: left; }
+.animate-pulse-amber { animation: pulse-amber 3s ease-in-out infinite; }
+
+.delay-100  { animation-delay: 0.10s; }
+.delay-200  { animation-delay: 0.20s; }
+.delay-300  { animation-delay: 0.30s; }
+.delay-400  { animation-delay: 0.40s; }
+.delay-500  { animation-delay: 0.50s; }
+.delay-600  { animation-delay: 0.60s; }
+.delay-700  { animation-delay: 0.70s; }
+.delay-800  { animation-delay: 0.80s; }
+.delay-900  { animation-delay: 0.90s; }
+.delay-1000 { animation-delay: 1.00s; }
+.delay-1100 { animation-delay: 1.10s; }
+.delay-1200 { animation-delay: 1.20s; }
+
+.font-display { font-family: var(--font-display); }
+.font-serif   { font-family: var(--font-serif); }
+.font-body    { font-family: var(--font-body); }

@@ -1,0 +1,120 @@
+---
+// Milestones.astro
+// Hitos completados y el próximo objetivo
+
+const START_DATE = new Date('2026-01-13T00:00:00');
+const today = new Date();
+today.setHours(0, 0, 0, 0);
+const totalDays = Math.floor((today.getTime() - START_DATE.getTime()) / (1000 * 60 * 60 * 24));
+
+const milestones = [
+  { days: 7,   label: '1 semana',   mark: 'I',    message: 'El hígado ya recuerda cómo funcionar' },
+  { days: 14,  label: '2 semanas',  mark: 'II',   message: 'Durmiendo como bebé (sobrio)' },
+  { days: 21,  label: '3 semanas',  mark: 'III',  message: 'Las neuronas vuelven poco a poco' },
+  { days: 30,  label: '1 mes',      mark: 'IV',   message: 'Un mes completo. Respeto.' },
+  { days: 60,  label: '2 meses',    mark: 'V',    message: 'Ya ni te acordabas del sabor' },
+  { days: 90,  label: '3 meses',    mark: 'VI',   message: 'Elite level. Eres una leyenda.' },
+  { days: 180, label: '6 meses',    mark: 'VII',  message: 'Medio año. Casi ni eres tú.' },
+  { days: 365, label: '1 año',      mark: 'VIII', message: 'Un año entero. Monumento nacional.' },
+];
+
+const completed = milestones.filter(m => totalDays >= m.days);
+const next = milestones.find(m => totalDays < m.days);
+const daysToNext = next ? next.days - totalDays : null;
+const progressPct = next ? Math.min((totalDays / next.days) * 100, 100) : 100;
+---
+
+<div class="animate-fade-up delay-700" style="opacity: 0;">
+  <!-- Título sección -->
+  <div class="flex items-center gap-4 mb-8">
+    <div
+      class="h-px flex-1 animate-line delay-700"
+      style="background: linear-gradient(to right, transparent, var(--color-amber-dim)); transform-origin: left;"
+    ></div>
+    <h2
+      class="font-display font-bold uppercase tracking-[0.3em] text-sm"
+      style="color: var(--color-amber-dim);"
+    >
+      Progreso
+    </h2>
+    <div
+      class="h-px flex-1 animate-line delay-700"
+      style="background: linear-gradient(to left, transparent, var(--color-amber-dim)); transform-origin: right;"
+    ></div>
+  </div>
+
+  <!-- Hitos completados -->
+  {completed.length > 0 && (
+    <div class="flex flex-wrap justify-center gap-3 mb-8">
+      {completed.map((m, i) => (
+        <div
+          class="flex items-center gap-2 px-4 py-2 rounded-sm text-sm font-display font-bold uppercase tracking-wider"
+          style={`
+            background: var(--color-bg-card);
+            border: 1px solid var(--color-amber-dim);
+            color: var(--color-gold);
+            animation-delay: ${0.7 + i * 0.08}s;
+          `}
+          title={m.message}
+        >
+          <span class="font-serif italic text-xs" style="color: var(--color-amber-dim);">{m.mark}</span>
+          <span>{m.label}</span>
+        </div>
+      ))}
+    </div>
+  )}
+
+  <!-- Próximo hito con barra de progreso -->
+  {next && (
+    <div
+      class="max-w-md mx-auto p-6 rounded-sm"
+      style="background: var(--color-bg-card); border: 1px solid oklch(72% 0.18 72 / 0.15);"
+    >
+      <div class="flex justify-between items-baseline mb-3">
+        <span class="font-display font-bold uppercase tracking-wider text-sm" style="color: var(--color-cream-dim);">
+          Próximo hito
+        </span>
+        <span class="font-display font-bold text-2xl" style="color: var(--color-amber);">
+          {next.label}
+        </span>
+      </div>
+
+      <!-- Barra de progreso -->
+      <div
+        class="h-1.5 rounded-full overflow-hidden mb-3"
+        style="background: oklch(22% 0.05 55);"
+      >
+        <div
+          class="h-full rounded-full animate-line delay-900"
+          style={`
+            width: ${progressPct}%;
+            background: linear-gradient(to right, var(--color-amber-dim), var(--color-gold));
+            transform-origin: left;
+          `}
+        ></div>
+      </div>
+
+      <div class="flex justify-between">
+        <span class="text-xs font-body" style="color: var(--color-muted);">
+          {totalDays} días
+        </span>
+        <span class="text-xs font-body font-medium" style="color: var(--color-amber-dim);">
+          Faltan <strong style="color: var(--color-amber);">{daysToNext}</strong> {daysToNext === 1 ? 'día' : 'días'}
+        </span>
+      </div>
+
+      <!-- Mensaje motivacional del siguiente hito -->
+      <p class="mt-4 font-serif italic text-sm text-center" style="color: var(--color-cream-dim);">
+        &ldquo;{next.message}&rdquo;
+      </p>
+    </div>
+  )}
+
+  {!next && (
+    <div class="text-center py-6">
+      <p class="font-serif italic text-xl" style="color: var(--color-gold);">
+        &ldquo;Completaste todos los hitos. Eres un fenómeno.&rdquo;
+      </p>
+    </div>
+  )}
+</div>
