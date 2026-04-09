@@ -100,11 +100,11 @@ import Onboarding from '../components/Onboarding.astro';
               border-bottom: 1px solid oklch(72% 0.18 72 / 0.4);
             "
           ></div>
-          <p
+           <p
             class="font-display font-black uppercase"
             style="
               letter-spacing: 0.5em;
-              font-size: clamp(0.75rem, 2vw, 0.95rem);
+              font-size: clamp(0.95rem, 2.5vw, 1.2rem);
               color: var(--color-amber);
             "
           >
@@ -112,7 +112,7 @@ import Onboarding from '../components/Onboarding.astro';
           </p>
         </div>
 
-        <!-- Toggle: Mi contador / Rodrigo -->
+        <!-- Toggle: Mi contador / Rodrigo / Cambiar fecha -->
         <div id="mode-toggle" class="items-center justify-center gap-1 mt-6" style="display: none;">
           <button
             id="btn-mine"
@@ -135,6 +135,19 @@ import Onboarding from '../components/Onboarding.astro';
               border: 1px solid transparent;
             "
           >Rodrigo</button>
+          <span style="color: oklch(35% 0.04 55); font-size: 0.7rem;">·</span>
+          <button
+            id="reset-date-btn-header"
+            class="font-display uppercase tracking-widest"
+            style="
+              background: none; border: none; cursor: pointer;
+              font-size: 0.65rem; padding: 0.3rem 0.8rem;
+              letter-spacing: 0.15em; transition: all 0.2s;
+              color: oklch(38% 0.04 55); border: 1px solid transparent;
+            "
+            onmouseover="this.style.color='var(--color-muted)'"
+            onmouseout="this.style.color='oklch(38% 0.04 55)'"
+          >Cambiar fecha</button>
         </div>
       </header>
 
@@ -220,12 +233,15 @@ import Onboarding from '../components/Onboarding.astro';
     <script>
       import { clearStartDate, getMode, setMode, hasUserDate } from '../scripts/dateStore.js';
 
-      // ── Reset de fecha ──────────────────────────────────────────────
-      document.getElementById('reset-date-btn')?.addEventListener('click', () => {
+      function openOnboarding() {
         clearStartDate();
         const overlay = document.getElementById('onboarding-overlay');
         if (overlay) overlay.style.display = 'flex';
-      });
+      }
+
+      // ── Reset de fecha (footer y header) ───────────────────────────
+      document.getElementById('reset-date-btn')?.addEventListener('click', openOnboarding);
+      document.getElementById('reset-date-btn-header')?.addEventListener('click', openOnboarding);
 
       // ── Toggle Mi contador / Rodrigo ────────────────────────────────
       const btnMine = document.getElementById('btn-mine') as HTMLButtonElement;
@@ -238,9 +254,12 @@ import Onboarding from '../components/Onboarding.astro';
           btn.style.color = isActive ? 'var(--color-amber)' : 'oklch(38% 0.04 55)';
           btn.style.borderColor = isActive ? 'oklch(72% 0.18 72 / 0.3)' : 'transparent';
         });
-        // Ocultar "cambiar mi fecha" cuando se ve el contador del dev
-        const resetBtn = document.getElementById('reset-date-btn') as HTMLButtonElement;
-        if (resetBtn) resetBtn.style.display = mode === 'dev' ? 'none' : '';
+        // Ocultar "cambiar fecha" (header y footer) cuando se ve el contador del dev
+        const resetBtnFooter = document.getElementById('reset-date-btn') as HTMLButtonElement;
+        const resetBtnHeader = document.getElementById('reset-date-btn-header') as HTMLButtonElement;
+        const hide = mode === 'dev' ? 'none' : '';
+        if (resetBtnFooter) resetBtnFooter.style.display = hide;
+        if (resetBtnHeader) resetBtnHeader.style.display = hide;
       }
 
       function checkToggleVisibility() {
@@ -266,6 +285,7 @@ import Onboarding from '../components/Onboarding.astro';
       // Mostrar toggle cuando el usuario guarda su fecha
       window.addEventListener('date-updated', () => {
         checkToggleVisibility();
+        updateToggle(getMode());
       });
     </script>
   </body>
